@@ -1,6 +1,6 @@
   # Assignment 1 - Simple Client Server Application
 
-  ![logo_c ](width=10)
+  ![logo_c ]
   # Features:
   - The **client** program reads input from user and performs the following actions repeatedly until directed to exit:
     - If the user enters **'s'** it will ask user to enter a string. It then sends *"CAP\nxxx\n"* to the server (where "xxx" is the string entered by the user,which could input any character except"\n"), and receives a message from the server and display the message on the screen.
