@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-
+#include <string.h>
 #define MAX_LINE 1000    	
 
 void error(char* msg){
@@ -14,7 +14,7 @@ void error(char* msg){
 
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv){		
 		int       list_s;                /*  listening socket          */
 		int       conn_s;                /*  connection socket         */
 		short int port;                  /*  port number               */
@@ -35,11 +35,32 @@ int main(int argc, char** argv){
 						error("Invalid port number supplied!");
 				}
 		}
-		
-		if( conn_s = socket(AF_INET, SOCK_STREAM, 0) < 0 ){
-			errorno = ENOSR;
-			error("No Socket obtained from the OS\n");
+
+		//instantiate listening socket used to assign address to socket
+		if( list_s = socket(AF_INET, SOCK_STREAM, 0) < 0 ){
+				error("No Socket obtained from the OS\n");
 		}
+
+		//zero out the sockaddr_in 
+		memset(&servaddr, 0, sizeof(servaddr));
+		//setup
+		servaddr.sin_family = AF_INET;
+		servaddr.sin_addr.s_addr = htonl (INADDR_ANY);  //bind to all available interfaces
+		servaddr.sin_port = htons(port);
+
+		if( bind( list_s, &servaddr, sizeof(servaddr) ) < 0 ){
+				error("Unable to bind the listening socket\n");
+		}
+
+		
+		//listen marks a socket as passive socket which  will only be used to accept incoming requests using accept
+		//only one socket can listen on a port
+		if( listen(list_s,LISTEN_QUEUE) < 0 ){
+			error("Error Calling Listen \n");
+			
+		}
+		
+		
 
 		return 0;
 }
