@@ -7,9 +7,9 @@
 #ifndef HELPER
 #define HELPER
 
-#LISTEN_QUEUE 10000	//limit listen queue backlog 
+#define LISTEN_QUEUE 10000	//limit listen queue backlog 
 
-
+#define MAX_LINE 1000 
 
 
 #endif
