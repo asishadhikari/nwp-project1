@@ -52,7 +52,7 @@ int main(int argc, char** argv){
 	servaddr.sin_addr.s_addr = htonl (INADDR_ANY);  //bind to all available interfaces
 	servaddr.sin_port = htons(port);
 
-	if( bind( list_s, &servaddr, sizeof(servaddr) ) < 0 ){
+	if( bind( list_s, (struct sockaddr*) &servaddr, sizeof(servaddr) ) < 0 ){
 		error("Unable to bind the listening socket\n");
 	}
 
@@ -62,9 +62,10 @@ int main(int argc, char** argv){
 	if( listen(list_s,LISTEN_QUEUE) < 0 ){
 		error("Error Calling Listen \n");
 	}
-
+	
+	int addr_size = sizeof(claddr);
 	while(1){
-		if( conn_s = accept(list_s, claddr, sizeof(claddr)) < 0 ){
+		if( conn_s = accept(list_s, (struct sockaddr*) &claddr, &addr_size  ) < 0 ){
 			error("unable to accept incoming connection\n");
 		}
 		//spawn a thread for each new incoming connection
