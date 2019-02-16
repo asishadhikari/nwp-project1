@@ -46,7 +46,7 @@ int main(int argc, char** argv){
 	}
 
 	//zero out the sockaddr_in 
-	memset(&servaddr, 0, sizeof(servaddr));
+	memset( &servaddr, 0, sizeof(servaddr) );
 	//setup
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_addr.s_addr = htonl (INADDR_ANY);  //bind to all available interfaces
