@@ -11,6 +11,8 @@
 
 #define MAX_LINE 1000    	
 
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
 void error(char* msg){
 	perror(msg);
 	exit(EXIT_FAILURE);
@@ -34,8 +36,6 @@ int main(int argc, char** argv){
 	else{
 		port = strtol(argv[1], &endptr, 0);
 		if (*endptr){
-			//endptr not null means error
-			errno = EINVAL;
 			error("Invalid port number supplied!");
 		}
 	}
@@ -68,7 +68,6 @@ int main(int argc, char** argv){
 			error("unable to accept incoming connection\n");
 		}
 		//spawn a thread for each new incoming connection
-
 	}
 
 
