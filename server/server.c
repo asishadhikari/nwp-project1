@@ -10,7 +10,6 @@
 #include "helper.h"
 
 
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 void error(char* msg){
 	perror(msg);
