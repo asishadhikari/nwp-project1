@@ -27,7 +27,7 @@ int main(int argc, char** argv){
 	char      buffer[MAX_LINE];      /*  character buffer          */
 	char     *endptr;                /*  error checking for strtol()  */
 
-
+	
 	if (argc!=2){
 		errno = EINVAL;
 		error("usage: ./server PORT_NO\n");
@@ -66,18 +66,16 @@ int main(int argc, char** argv){
 	int addr_size = sizeof(claddr);
 	pthread_t tid[MAX_NUM_CONNECTIONS];
 	int i = 0;
-
-	while(1){
-		if ( i < MAX_NUM_CONNECTIONS ){
-			if( (conn_s = accept(list_s, (struct sockaddr*) &claddr, &addr_size)) < 0 ){
-				error("unable to accept incoming connection\n");
-			}
-				//spawn a thread for each new incoming connection
-			if( (pthread_create(&tid[i++],NULL,threadFunc,conn_s)) != 0){
-				errno = EPERM;
-				error("Unable to spawn threads");
-			}
-		} 
+	while(i<MAX_NUM_CONNECTIONS){
+	 		if( (conn_s = accept(list_s, (struct sockaddr*) &claddr, &addr_size)) < 0 ){
+	 			error("unable to accept incoming connection\n");
+	 		}
+ 			//spawn a thread for each new incoming connection
+ 			printf("ok...\n");
+ 		if( (pthread_create(&tid[i++],NULL,threadFunc,&conn_s)) != 0){
+	 			errno = EPERM;
+	 			error("Unable to spawn threads");
+	 		}
 	}
 
 
