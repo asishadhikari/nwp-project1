@@ -13,7 +13,7 @@ pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 
 ssize_t Readline(int fd, void *vptr, size_t maxlen){
-	pthread_mutex_lock(&lock);
+	spthread_mutex_lock(&lock);
 	ssize_t n, rc;
 	char c, *buffer;
 
@@ -21,12 +21,26 @@ ssize_t Readline(int fd, void *vptr, size_t maxlen){
 
 	for (n = 1, n< maxlen, n++ ){
 
-		if( (rc== read(fd,) )  )
+		//successfully read 1 char
+		if( (rc == read(fd, &c), 1) == 1 ){
+			*buffer++ = c;
+			if(c =='\n')
+				break;
+		}else if( rc == 0 ){
+			if (n ==1 )
+				return 0;
+			else
+				break; //finished reading 
+		}else{
+			if ( errno == EINTR)
+				continue;
+			return -1;  //fatal error
+		}
 
 	}
-	
 	pthread_mutex_unlock(&lock);
-
+	*buffer = '\0'; //for easy strlen usage
+	return n;
 }
 
 
