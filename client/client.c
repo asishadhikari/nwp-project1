@@ -10,14 +10,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <errno.h>
-#define BUFFER_SIZE 1000 		
-
-
-void error(const char* msg){
-	perror(msg);
-	exit(EXIT_FAILURE);
-}
-
+#include "helper.h"
 
 
 int main(int argc, char *argv[]){
@@ -48,12 +41,17 @@ int main(int argc, char *argv[]){
     	error("Invalid Ipv4 address provided.");
     }
 
+    //attempt to connect
+    if ( connect(clSocket, (struct sockaddr*) &servAddr, sizeof(servAddr)) < 0 )
+    	error("Unable to call connect");
+    printf("Connected to server\n");
+
 	//loop while input != 'q'
 	while (user_input!='q'){
 		switch(user_input){
 			case 's':
 				//TODO implement string handler
-//				capString();				
+				capString();				
 				break;
 		
 			case 'f':

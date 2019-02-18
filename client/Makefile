@@ -1,3 +1,5 @@
 build:
-	gcc client.c 
+	gcc client.c helper.c
+clean:
+	rm a.out
 
