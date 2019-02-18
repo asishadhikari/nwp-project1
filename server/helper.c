@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include<stdint.h>
 
 #include "helper.h"
 
@@ -68,7 +69,6 @@ ssize_t Writeline(int fd, void *vptr, size_t n) {
 
     buffer = vptr;
     nleft  = n;
-    printf("eneterd writeline\n");
     while ( nleft > 0 ) {
 	if ( (nwritten = write(fd, buffer, nleft)) <= 0 ) {
 	    if ( errno == EINTR )
@@ -88,8 +88,8 @@ ssize_t Writeline(int fd, void *vptr, size_t n) {
 
 
 void capitalize(char *buf, int soc){
-	int i = 0;
-	char c;
+	uint32_t i = 0;
+	char c, nl = '\n';
 	printf("capitalize called\n");
 	Readline(soc,buf,MAX_LINE);
 	//buffer contains user's string
@@ -101,8 +101,9 @@ void capitalize(char *buf, int soc){
 		}
 		i++;
 	}
+	Writeline(soc, &i, sizeof(i));
+	Writeline(soc, &nl, sizeof(nl));
 	Writeline(soc, buf, i+1);
-
 
 }
 void send_file(char *buf, int soc){
