@@ -88,8 +88,11 @@ void* threadFunc(void *arg)
 	char *read_buffer;
 	if ( !(read_buffer = calloc(1,MAX_LINE)) ) 
 		return NULL;
+
 	rn = Readline(clSocket, read_buffer, MAX_LINE);
+	printf("Read %d bytes\n",rn);
 	int command = parse_command(read_buffer);
+	printf("%c\n",(char)read_buffer[rn-1]) ;
 	printf("Command %d received.\n",command);
 	//parse command
 	switch (command){

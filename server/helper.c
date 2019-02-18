@@ -56,32 +56,55 @@ ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
 
     *buffer = 0; //load terminating null byte 
     return n;
-    
+
 
 }
 
 
-ssize_t Writeline(int fd, void *vptr, size_t maxlen){
+ssize_t Writeline(int fd, void *vptr, size_t n) {
+    size_t      nleft;
+    ssize_t     nwritten;
+    char *buffer;
 
+    buffer = vptr;
+    nleft  = n;
+    printf("eneterd writeline\n");
+    while ( nleft > 0 ) {
+	if ( (nwritten = write(fd, buffer, nleft)) <= 0 ) {
+	    if ( errno == EINTR )
+		nwritten = 0;
+	    else
+		return -1;
+	}
+	nleft  -= nwritten;
+	buffer += nwritten;
+    }
+
+    return n;
 }
+
 
 
 
 
 void capitalize(char *buf, int soc){
-	int i = 0, count = 0;
+	int i = 0;
 	char c;
 	printf("capitalize called\n");
-	Readline(soc,buf,MAX_LINE-1);
-	while( (c = buf[i]) != '\n' && i < MAX_LINE){
+	Readline(soc,buf,MAX_LINE);
+	//buffer contains user's string
+	while( (c = buf[i]) != '\n' && i < MAX_LINE-1){
+		printf("%c val \n",buf[i] );
 		if( c >= 'a' && c <= 'z'){
     		c = c - ('a' - 'A');
-			count++;
+			buf[i] = c;
 		}
 		i++;
 	}
-}
+	Writeline(soc, buf, i+1);
 
+
+}
 void send_file(char *buf, int soc){
 
 }
