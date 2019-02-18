@@ -10,7 +10,13 @@
 
 
 int parse_command(char* buf){
-	
+	if(buf[0]=='C' && buf[1]=='A' && buf[2]=='P')
+		return 1;
+	if (buf[0]=='F' && buf[1] == 'I'
+		 && buf[3]=='L' && buf[4] == 'E')
+		return 2;
+	return -1;
+
 }
 
 
