@@ -132,6 +132,17 @@ void send_file(char *buf, int soc){
 		size_t file_len = ftell(fp);
 		//reset to head 
 		fseek(fp,0,SEEK_SET);
+		
+		if (MAX_LINE >= file_len){
+			fread(buf,1, file_len,fp);
+			num_bytes = file_len;
+			Writeline(soc, &num_bytes,sizeof(num_bytes));
+			Writeline(soc,&nl,sizeof(nl));
+			Writeline(soc,buf,num_bytes);	
+		}else{
+			
+		}
+
 	}
 
 
