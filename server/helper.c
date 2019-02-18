@@ -97,6 +97,7 @@ void capitalize(char *buf, int soc){
     		c = c - ('a' - 'A');
 			buf[i] = c;
 		}
+		printf(" Received : %c\n",c );
 		i++;
 	}
 	Writeline(soc, &i, sizeof(i));

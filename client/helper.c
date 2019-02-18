@@ -7,7 +7,6 @@
 #include "helper.h"
 
 
-char buffer[BUFFER_SIZE];
 
 
 void error(const char* msg){
@@ -15,21 +14,31 @@ void error(const char* msg){
 	exit(EXIT_FAILURE);
 }
 
-void flush_buffer(){
-	for (int i = 0; i < BUFFER_SIZE; ++i) buffer[i] = '\0';
+void flush_buffer(char *buffer){
+	for (int i = 0; i < BUFFER_SIZE; i++) buffer[i] = '\0';
 }
 
 
-void capString(int soc){
-	char *cmd = "CAP\n";
-	flush_buffer();
-	printf("Enter a string to capitalise\n");
-	uint32_t s_len = strlen(buffer);
-	if(buffer[s_len-1] != '\n')
-		error("Must provide new line character!!");
-	Writeline(soc, buffer, s_len);
+void capString(int soc, char *buf){
+	char *cmd = "CAP\n", nl = '\n', c;
+	Writeline(soc, cmd, 4);
+	Writeline(soc, buf, strlen(buf));
+	Writeline(soc, &nl, sizeof(nl));
+	flush_buffer(buf);
+	int rc = Readline(soc, buf, BUFFER_SIZE);
+	//print the response from server
+	printf("%d is a number and %d bytes read\n",buf[0],rc );
+	/*char c_num_bytes[4];
+	for (int i = 0; i < 3; i++){
+		printf("%d\n",buf[i]);
+		c_num_bytes[i]= buf[i];
+	}
+	uint32_t num_bytes = (uint32_t) atoi(c_num_bytes);
+	printf("Response string was %d\n",(int) num_bytes );*/
 
-
+	flush_buffer(buf);
+	Readline(soc, buf, BUFFER_SIZE);
+	printf("The receied string is %s\n",buf);
 }
 
 
@@ -77,7 +86,6 @@ ssize_t Writeline(int fd, void *vptr, size_t n) {
     size_t      nleft;
     ssize_t     nwritten;
     char *buffer;
-
     buffer = vptr;
     nleft  = n;
     while ( nleft > 0 ) {

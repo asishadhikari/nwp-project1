@@ -10,7 +10,11 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <errno.h>
+#include <stdint.h>
+#include <unistd.h>
 #include "helper.h"
+
+char buffer[BUFFER_SIZE];
 
 
 int main(int argc, char *argv[]){
@@ -43,32 +47,38 @@ int main(int argc, char *argv[]){
     if( !(inet_aton(svIP, &servAddr.sin_addr)) ){
     	errno = EINVAL;
     	error("Invalid Ipv4 address provided.");
-    }
+    } 
 
     //attempt to connect
     if ( ( connect(clSocket, (struct sockaddr*) &servAddr, sizeof(servAddr)) ) < 0 )
     	error("Unable to call connect");
     printf("Connected to server\n");
 
+    char *cap = "CAP\n" , nl = '\n', to_cap;
+    uint32_t str_len = 0;
 	//loop while input != 'q'
-	while (user_input!='q'){
+	char trash;
+	while (user_input!= 'q'){
+		printf("\n\tEnter 's' (capitalize string), 'f' (receive file), or 'q' (to quit)... (\n" );
+		user_input = (char) getc(stdin);
+		trash = getc(stdin); //get rid of newline character
 		switch(user_input){
 			case 's':
-				//TODO implement string handler
-				capString(clSocket);				
+				printf("Enter the string to capitalise\n");
+				fgets(buffer, BUFFER_SIZE,stdin);
+				capString(clSocket,buffer);
 				break;
-		
-			case 'f':
-				//TODO implement file handler
-//				getFile();
+			case'f':
+				printf("F entered\n");
 				break;
-		
 			default:
+				printf("default entered\n");
 				break;
 		}
-		printf("Enter 's' (capitalize string), 'f' (receive file), or 'q' (to quit)... (\n" );
-		user_input = getchar();
+		
+
 	}
+	close(clSocket);
 
 	return 0;
 	
