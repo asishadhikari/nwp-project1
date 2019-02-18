@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <errno.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "helper.h"
 
 
@@ -7,6 +12,10 @@ char buffer[BUFFER_SIZE];
 void error(const char* msg){
 	perror(msg);
 	exit(EXIT_FAILURE);
+}
+
+void flush_buffer(){
+	for (int i = 0; i < BUFFER_SIZE; ++i) buffer[i] = 0;
 }
 
 

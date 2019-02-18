@@ -19,8 +19,6 @@ int main(int argc, char *argv[]){
 	int clSocket;
 	struct sockaddr_in servAddr;
 
-	char buffer[BUFFER_SIZE];
-    
 	char user_input = 't';
 	if (argc!=3){
 		errno = EINVAL;
