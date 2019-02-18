@@ -8,7 +8,11 @@
 
 #include "helper.h"
 
-int identify_command
+
+int parse_command(char* buf){
+	
+}
+
 
 ssize_t Readline(int fd, void *vptr, size_t maxlen){
 	ssize_t n, rc;
@@ -16,10 +20,10 @@ ssize_t Readline(int fd, void *vptr, size_t maxlen){
 
 	buffer = vptr;
 
-	for (n = 1, n< maxlen, n++ ){
+	for (n = 1; n< maxlen; n++ ){
 
 		//successfully read 1 char
-		if( (rc == read(fd, &c), 1) == 1 ){
+		if( (rc == read(fd, &c, 1)) == 1 ){
 			*buffer++ = c;
 			if(c =='\n')
 				break;
@@ -40,7 +44,7 @@ ssize_t Readline(int fd, void *vptr, size_t maxlen){
 }
 
 
-ssize_t Writeline(int fd, void *vptr, ssize_t maxlen){
+ssize_t Writeline(int fd, void *vptr, size_t maxlen){
 
 }
 
@@ -51,16 +55,13 @@ void * threadFunc(void *arg)
 {
 	int clSocket = *( (int *) arg) ;
 	char read_buffer[MAX_LINE]; //buffer to read into 
+	int i = 0;
 	//read line once to identify command received
-	if ( (i = Readline(clSocket, read_buffer, MAX_LINE)) < = 0)
-		error("Unable to read any data from client. \n");
-	
-
-
-
-
-	
-	
-
+	if ( ( i = Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
+		return NULL;
+	//parse command
+	int command = parse_command(read_buffer);
+	if (command != 1 || command != 2)
+		return NULL;
 
 }
