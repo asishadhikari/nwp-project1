@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include "helper.h"
 
 
@@ -15,11 +16,19 @@ void error(const char* msg){
 }
 
 void flush_buffer(){
-	for (int i = 0; i < BUFFER_SIZE; ++i) buffer[i] = 0;
+	for (int i = 0; i < BUFFER_SIZE; ++i) buffer[i] = '\0';
 }
 
 
-void capString(){
+void capString(int soc){
+	char *cmd = "CAP\n";
+	flush_buffer();
+	printf("Enter a string to capitalise\n");
+	uint32_t s_len = strlen(buffer);
+	if(buffer[s_len-1] != '\n')
+		error("Must provide new line character!!");
+	Writeline(soc, buffer, s_len);
+
 
 }
 

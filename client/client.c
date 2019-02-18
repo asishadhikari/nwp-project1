@@ -14,9 +14,8 @@
 
 
 int main(int argc, char *argv[]){
-	char *svIP;
-	int svPort;
-	int clSocket;
+	char *svIP, *svPort, *endptr;
+	int clSocket, port;
 	struct sockaddr_in servAddr;
 
 	char user_input = 't';
@@ -25,22 +24,29 @@ int main(int argc, char *argv[]){
 		error("Usage: %s hostname port\n");	
 	}
 
-	svIP = argv[1];
-
 	//obtain socket descriptor 
 	if ( (clSocket = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) 
 		error("ECHOCLNT: Error creating listening socket.\n");
     
+
+	svIP = argv[1];
+	svPort = argv[2];
+
+	port = strtol(svPort, &endptr,10);
+	if(*endptr)
+		error("Invalid port");
+	
     memset(&servAddr, 0, sizeof(servAddr));
     servAddr.sin_family = AF_INET;
-    servAddr.sin_port = htons(svPort);
+    servAddr.sin_port = htons(port);
+    //assign IP address
     if( !(inet_aton(svIP, &servAddr.sin_addr)) ){
     	errno = EINVAL;
     	error("Invalid Ipv4 address provided.");
     }
 
     //attempt to connect
-    if ( connect(clSocket, (struct sockaddr*) &servAddr, sizeof(servAddr)) < 0 )
+    if ( ( connect(clSocket, (struct sockaddr*) &servAddr, sizeof(servAddr)) ) < 0 )
     	error("Unable to call connect");
     printf("Connected to server\n");
 
@@ -49,7 +55,7 @@ int main(int argc, char *argv[]){
 		switch(user_input){
 			case 's':
 				//TODO implement string handler
-				capString();				
+				capString(clSocket);				
 				break;
 		
 			case 'f':
