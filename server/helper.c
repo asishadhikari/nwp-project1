@@ -20,33 +20,44 @@ int parse_command(char* buf){
 }
 
 
-ssize_t Readline(int fd, void *vptr, size_t maxlen){
-	ssize_t n, rc;
-	char c, *buffer;
-	printf("Readline called\n");
-	buffer = vptr;
+ssize_t Readline(int sockd, void *vptr, size_t maxlen) {
+    ssize_t n, rc;
+    char    c, *buffer;
 
-	for (n = 1; n< maxlen; n++ ){
+    buffer = vptr;
 
-		//successfully read 1 char
-		if( (rc == read(fd, &c, 1)) == 1 ){
-			*buffer++ = c;
-			if(c =='\n')
-				break;
-		}else if( rc == 0 ){
-			if (n ==1 )
-				return 0; //no data available
-			else
-				break; //finished reading 
-		}else{
-			if ( errno == EINTR)
-				continue;
-			return -1;  //fatal error
-		}
-
+    //attempt to read maxlen num bytes
+    for ( n = 1; n < maxlen; n++ ) {
+	
+	//if successful read of one character
+	if ( (rc = read(sockd, &c, 1)) == 1 ) {
+	    //increment buffer pointer and store the read byte
+	    *buffer++ = c;
+	    //loop if newline character encountered
+	    if ( c == '\n' )
+		break;
 	}
-	*buffer = '\0'; //for easy strlen usage
-	return n;
+	
+	//if no character was read
+	else if ( rc == 0 ) {
+	    //if  in first iteration of reading 
+	    if ( n == 1 )
+		return 0;  //no data ever available in the socket
+	    else
+		break; //finished reading all data in socket
+	}
+
+	else {
+	    if ( errno == EINTR ) //non fatal error 
+		continue;
+	    return -1; //all other errors 
+	}
+    }
+
+    *buffer = 0; //load terminating null byte 
+    return n;
+    
+
 }
 
 

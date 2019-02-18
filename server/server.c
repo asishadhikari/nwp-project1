@@ -81,8 +81,6 @@ int main(int argc, char** argv){
 		pthread_join(tid[i],NULL);
 	}
 
-
-
 	return 0;
 }
 
@@ -94,11 +92,10 @@ void* threadFunc(void *arg)
 	char *read_buffer;
 	if ( !(read_buffer = calloc(1,MAX_LINE)) ) 
 		return NULL;
-	int command;
-	printf("Before.. %d\n",read_buffer[20] );
-	Readline(clSocket, read_buffer, MAX_LINE);
-	printf("After.. %c\n",read_buffer[0] );
-
+	Readline(clSocket, read_buffer, MAX_LINE-1);
+	
+	
+		
 	//read line once to identify command received
 	// if ( (Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
 	// 	return NULL;
@@ -110,9 +107,10 @@ void* threadFunc(void *arg)
 	// 	case 2:
 	// 		send_file(read_buffer,clSocket);
 	// }
+	
+	free(read_buffer);
 	printf("Closing client connection\n");
 	close(clSocket);
 	pthread_exit(NULL);
 
 }
-s
