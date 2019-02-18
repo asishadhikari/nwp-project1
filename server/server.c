@@ -92,23 +92,23 @@ void* threadFunc(void *arg)
 	char *read_buffer;
 	if ( !(read_buffer = calloc(1,MAX_LINE)) ) 
 		return NULL;
-	Readline(clSocket, read_buffer, MAX_LINE-1);
+	Readline(clSocket, read_buffer, 5);
 	
 	int command = parse_command(read_buffer);
-	printf("The command received was %d\n",command);
-
-
+	printf("Command %d received.\n",command);
 	//read line once to identify command received
-	// if ( (Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
-	// 	return NULL;
-	// //parse command
-	// switch (command = parse_command(read_buffer) ){
-	// 	case 1:
-	// 		capitalize(read_buffer, clSocket);
-	// 		break;
-	// 	case 2:
-	// 		send_file(read_buffer,clSocket);
-	// }
+	if ( (Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
+		return NULL;
+	//parse command
+	switch (command = parse_command(read_buffer) ){
+		case 1:
+			capitalize(read_buffer, clSocket);
+			break;
+		case 2:
+			send_file(read_buffer,clSocket);
+		default:
+			break;
+	}
 	
 	free(read_buffer);
 	printf("Closing client connection\n");
