@@ -126,7 +126,6 @@ void send_file(char *buf, int soc){
 		Writeline(soc,message,num_bytes);
 		return;
 	}else{
-		int done = 0;
 		fseek(fp,0,SEEK_END);
 		//get file size
 		size_t file_len = ftell(fp);
@@ -140,6 +139,16 @@ void send_file(char *buf, int soc){
 			Writeline(soc,&nl,sizeof(nl));
 			Writeline(soc,buf,num_bytes);	
 		}else{
+			uint32_t remaining = file_len, to_read = MAX_LINE;
+			while (remaining){
+				to_read = (MAX_LINE < remaining ? MAX_LINE : remaining);
+				fread(buf,1,to_read,fp);
+				remaining -= to_read;
+				num_bytes = to_read;
+				Writeline(soc, &num_bytes,sizeof(num_bytes));
+				Writeline(soc, &nl, sizeof(nl));
+				Writeline(soc, buf, num_bytes);
+			}
 			
 		}
 
