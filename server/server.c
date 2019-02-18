@@ -12,12 +12,8 @@
 
 
 void* threadFunc(void *arg); //thread function 
+void error(char *msg);
 
-void error(char* msg){
-	perror(msg);
-	exit(EXIT_FAILURE);
-
-}
 
 int main(int argc, char** argv){		
 	int       list_s;                /*  listening socket          */
@@ -88,19 +84,15 @@ void* threadFunc(void *arg)
 
 {
 
-	int clSocket = *( (int *) arg) ;
+	int clSocket = *( (int *) arg), rn ;
 	char *read_buffer;
 	if ( !(read_buffer = calloc(1,MAX_LINE)) ) 
 		return NULL;
-	Readline(clSocket, read_buffer, 5);
-	
+	rn = Readline(clSocket, read_buffer, MAX_LINE);
 	int command = parse_command(read_buffer);
 	printf("Command %d received.\n",command);
-	//read line once to identify command received
-	if ( (Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
-		return NULL;
 	//parse command
-	switch (command = parse_command(read_buffer) ){
+	switch (command){
 		case 1:
 			capitalize(read_buffer, clSocket);
 			break;
@@ -114,5 +106,12 @@ void* threadFunc(void *arg)
 	printf("Closing client connection\n");
 	close(clSocket);
 	pthread_exit(NULL);
+
+}
+
+
+void error(char *msg){
+	perror(msg);
+	exit(EXIT_FAILURE);
 
 }

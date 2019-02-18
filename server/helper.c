@@ -69,10 +69,17 @@ ssize_t Writeline(int fd, void *vptr, size_t maxlen){
 
 
 void capitalize(char *buf, int soc){
-
-
-	free(buf);
-	printf("Freed\n");
+	int i = 0, count = 0;
+	char c;
+	printf("capitalize called\n");
+	Readline(soc,buf,MAX_LINE-1);
+	while( (c = buf[i]) != '\n' && i < MAX_LINE){
+		if( c >= 'a' && c <= 'z'){
+    		c = c - ('a' - 'A');
+			count++;
+		}
+		i++;
+	}
 }
 
 void send_file(char *buf, int soc){
