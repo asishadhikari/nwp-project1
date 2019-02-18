@@ -69,8 +69,6 @@ int main(int argc, char** argv){
 	 		if( (conn_s = accept(list_s, (struct sockaddr*) &claddr, &addr_size)) < 0 ){
 	 			error("unable to accept incoming connection\n");
 	 		}
- 			//spawn a thread for each new incoming connection
- 			printf("ok...\n");
  		if( (pthread_create(&tid[i++],NULL,threadFunc,&conn_s)) != 0){
 	 			errno = EPERM;
 	 			error("Unable to spawn threads");

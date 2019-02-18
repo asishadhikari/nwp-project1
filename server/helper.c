@@ -1,4 +1,3 @@
-#include "helper.h"
 #include <sys/socket.h>
 #include <unistd.h>
 #include <errno.h>
@@ -7,13 +6,11 @@
 #include <string.h>
 #include <pthread.h>
 
-char RECEIVE_CLIENT_MESSAGE[MAX_LINE]
-char SEND_CLIENT_MESSAGE[MAX_LINE]
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+#include "helper.h"
 
+int identify_command
 
 ssize_t Readline(int fd, void *vptr, size_t maxlen){
-	spthread_mutex_lock(&lock);
 	ssize_t n, rc;
 	char c, *buffer;
 
@@ -38,17 +35,32 @@ ssize_t Readline(int fd, void *vptr, size_t maxlen){
 		}
 
 	}
-	pthread_mutex_unlock(&lock);
 	*buffer = '\0'; //for easy strlen usage
 	return n;
 }
+
+
+ssize_t Writeline(int fd, void *vptr, ssize_t maxlen){
+
+}
+
 
 
 void * threadFunc(void *arg)
 
 {
 	int clSocket = *( (int *) arg) ;
-	char m
+	char read_buffer[MAX_LINE]; //buffer to read into 
+	//read line once to identify command received
+	if ( (i = Readline(clSocket, read_buffer, MAX_LINE)) < = 0)
+		error("Unable to read any data from client. \n");
+	
+
+
+
+
+	
+	
 
 
 }
