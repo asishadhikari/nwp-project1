@@ -90,11 +90,9 @@ ssize_t Writeline(int fd, void *vptr, size_t n) {
 void capitalize(char *buf, int soc){
 	uint32_t i = 0;
 	char c, nl = '\n';
-	printf("capitalize called\n");
 	Readline(soc,buf,MAX_LINE);
 	//buffer contains user's string
 	while( (c = buf[i]) != '\n' && i < MAX_LINE-1){
-		printf("%c val \n",buf[i] );
 		if( c >= 'a' && c <= 'z'){
     		c = c - ('a' - 'A');
 			buf[i] = c;
@@ -107,5 +105,29 @@ void capitalize(char *buf, int soc){
 
 }
 void send_file(char *buf, int soc){
+	char c, *message = "NOT FOUND", nl = '\n';
+	FILE *fp;
+	uint32_t num_bytes = 0;
+	//read in file name
+	Readline(soc, buf, MAX_LINE-1);
+	//sanitise buffer to just contain the provided file name
+	for (int i = 0; i < strlen(buf); i++){
+		c = buf[i];
+		if (c == '\n' || c == '\r'){
+			buf[i] = 0;
+		}	
+
+	}	
+	if( (fp = fopen(buf,"r")) ==NULL){
+		//no such file present and assuming buffer is large enough for mesg
+		num_bytes = strlen(message);
+		printf("File %s %d not present in current directory!\n",buf, (int) num_bytes);
+	}else{
+		
+	}
+
+	Writeline(soc,&num_bytes,sizeof(num_bytes));
+	Writeline(soc,&nl,sizeof(nl));
+	Writeline(soc,message,num_bytes);
 
 }
