@@ -118,16 +118,21 @@ void send_file(char *buf, int soc){
 		}	
 
 	}	
-	if( (fp = fopen(buf,"r")) ==NULL){
+	if( (fp = fopen(buf,"rb")) ==NULL){
 		//no such file present and assuming buffer is large enough for mesg
 		num_bytes = strlen(message);
-		printf("File %s %d not present in current directory!\n",buf, (int) num_bytes);
+		Writeline(soc,&num_bytes,sizeof(num_bytes));
+		Writeline(soc,&nl,sizeof(nl));
+		Writeline(soc,message,num_bytes);
+		return;
 	}else{
-		
+		int done = 0;
+		fseek(fp,0,SEEK_END);
+		//get file size
+		size_t file_len = ftell(fp);
+		//reset to head 
+		fseek(fp,0,SEEK_SET);
 	}
 
-	Writeline(soc,&num_bytes,sizeof(num_bytes));
-	Writeline(soc,&nl,sizeof(nl));
-	Writeline(soc,message,num_bytes);
 
 }
