@@ -11,8 +11,6 @@
 #define MAX_NUM_CONNECTIONS 10
 #define MAX_LINE 10
 
-void * threadFunc(void *arg);
-
 ssize_t Readline(int fd, void *vptr, size_t maxlen);
 ssize_t Writeline(int fd, void *vptr, size_t maxlen);
 void capitalize(char *buf, int soc);

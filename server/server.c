@@ -110,8 +110,9 @@ void* threadFunc(void *arg)
 	// 	case 2:
 	// 		send_file(read_buffer,clSocket);
 	// }
-	return NULL;
-
+	printf("Closing client connection\n");
+	close(clSocket);
+	pthread_exit(NULL);
 
 }
 s
