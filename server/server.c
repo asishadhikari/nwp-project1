@@ -11,6 +11,8 @@
 
 
 
+void* threadFunc(void *arg); //thread function 
+
 void error(char* msg){
 	perror(msg);
 	exit(EXIT_FAILURE);
@@ -75,7 +77,41 @@ int main(int argc, char** argv){
 	 		}
 	}
 
+	for (int i = 0; i< MAX_NUM_CONNECTIONS; i++){
+		pthread_join(tid[i],NULL);
+	}
+
 
 
 	return 0;
 }
+
+void* threadFunc(void *arg)
+
+{
+
+	int clSocket = *( (int *) arg) ;
+	char *read_buffer;
+	if ( !(read_buffer = calloc(1,MAX_LINE)) ) 
+		return NULL;
+	int command;
+	printf("Before.. %d\n",read_buffer[20] );
+	Readline(clSocket, read_buffer, MAX_LINE);
+	printf("After.. %c\n",read_buffer[0] );
+
+	//read line once to identify command received
+	// if ( (Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
+	// 	return NULL;
+	// //parse command
+	// switch (command = parse_command(read_buffer) ){
+	// 	case 1:
+	// 		capitalize(read_buffer, clSocket);
+	// 		break;
+	// 	case 2:
+	// 		send_file(read_buffer,clSocket);
+	// }
+	return NULL;
+
+
+}
+s

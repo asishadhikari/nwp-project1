@@ -23,7 +23,7 @@ int parse_command(char* buf){
 ssize_t Readline(int fd, void *vptr, size_t maxlen){
 	ssize_t n, rc;
 	char c, *buffer;
-
+	printf("Readline called\n");
 	buffer = vptr;
 
 	for (n = 1; n< maxlen; n++ ){
@@ -35,7 +35,7 @@ ssize_t Readline(int fd, void *vptr, size_t maxlen){
 				break;
 		}else if( rc == 0 ){
 			if (n ==1 )
-				return 0;
+				return 0; //no data available
 			else
 				break; //finished reading 
 		}else{
@@ -56,18 +56,14 @@ ssize_t Writeline(int fd, void *vptr, size_t maxlen){
 
 
 
-void * threadFunc(void *arg)
 
-{
-	int clSocket = *( (int *) arg) ;
-	char read_buffer[MAX_LINE]; //buffer to read into 
-	int i = 0;
-	//read line once to identify command received
-	if ( ( i = Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
-		return NULL;
-	//parse command
-	int command = parse_command(read_buffer);
-	if (command != 1 || command != 2)
-		return NULL;
+void capitalize(char *buf, int soc){
+
+
+	free(buf);
+	printf("Freed\n");
+}
+
+void send_file(char *buf, int soc){
 
 }
