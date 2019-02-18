@@ -94,8 +94,10 @@ void* threadFunc(void *arg)
 		return NULL;
 	Readline(clSocket, read_buffer, MAX_LINE-1);
 	
-	
-		
+	int command = parse_command(read_buffer);
+	printf("The command received was %d\n",command);
+
+
 	//read line once to identify command received
 	// if ( (Readline(clSocket, read_buffer, MAX_LINE) ) <= 0)
 	// 	return NULL;

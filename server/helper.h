@@ -15,7 +15,7 @@ ssize_t Readline(int fd, void *vptr, size_t maxlen);
 ssize_t Writeline(int fd, void *vptr, size_t maxlen);
 void capitalize(char *buf, int soc);
 void send_file(char *buf, int soc);
-
+int parse_command(char* buf);
 
 #endif
 
