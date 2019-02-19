@@ -12,17 +12,19 @@
     - If **"FILE\nxxx\n"** is received from the client,it reads the content from the file named "xxx" from the directory where the server program is in and sends **"###\nDDD"** back to the client,where"###" is the number of bytes of the file and "DDD" is the content of the file. Note that the file may contain binary data such as images. If no file of the name "xxx" exists, it sends **"###\nNOT FOUND"** back to the client, where "###" is the number of characters in the string of "NOT FOUND". 
     - The server supports multiple connections with the client simultaneously.
 
-  # To Build:
+  # To Build client and server program:
   ``` sh
-  $ cd nwp-project1
+  $ cd nwp-project1/client
+  $ make
+  $ cd nwp-project1/server
   $ make
   ```
-  Run  ```make clean``` to clear the compiled binaries.
+  Run  ```make clean``` in ```client``` and ```server``` directories to clear the compiled binaries.
   # To Run:
   > Run client as:
   >>``` sh
   >>$ cd nwp-project1
-  >>$ ./client xxx.xxx.xxx yy
+  >>$ ./client.out xxx.xxx.xxx yy
   >>```
   > Run server as:
   >>``` sh
@@ -31,5 +33,5 @@
   >>```
 
   Where ```xxx.xxx.xxx``` is the server IP address and ```yy``` is the port number. 
-
+To use the client software, just follow the prompts on screen :)
   [logo_c]: <https://seeklogo.com/images/C/c-programming-language-logo-9B32D017B1-seeklogo.com.png>

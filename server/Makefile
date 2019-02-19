@@ -1,4 +1,4 @@
 build:
-	gcc server.c helper.c -l pthread
+	gcc server.c helper.c -l pthread -o server
 clean:
-	rm a.out
+	rm server
