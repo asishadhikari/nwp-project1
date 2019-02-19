@@ -1,3 +1,4 @@
+
 #include <sys/socket.h>
 #include <unistd.h>
 #include <errno.h>
@@ -137,7 +138,9 @@ void send_file(char *buf, int soc){
 		if (MAX_LINE >= file_len){
 			fread(buf,1, file_len,fp);
 			num_bytes = file_len;
-			Writeline(soc, &num_bytes,sizeof(num_bytes));
+			
+
+			Writeline(soc, &num_bytes,5);
 			Writeline(soc,&nl,sizeof(nl));
 			Writeline(soc,buf,num_bytes);	
 		}else{
