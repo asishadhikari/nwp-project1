@@ -67,25 +67,32 @@ void getFile(int soc, char *buffer){
 	}
 
 	free(num_bytes_c);
-	Readline(soc, temp_buf, BUFFER_SIZE);
+	char *file_name = calloc(100,1);
+	strcpy(file_name, buffer);
+	flush_buffer(buffer);
+	//read in data to buffer
+	Readfile(soc, buffer, BUFFER_SIZE);
 	//file not found in server
-	if (strcmp(temp_buf,"NOT FOUND") == 0){
+	if (strcmp(buffer,"NOT FOUND") == 0){
 		printf("\n File not found in server \n");
 		flush_buffer(buffer);
 	}else{
 		FILE *fp;
-		buffer[strlen(buffer)-1] = '\0';
-		if ( (fp = fopen(buffer, "wb")) == NULL ) 
-		error("Unable to open file for writing\n");	
+		file_name[strlen(file_name)-1] = '\0';
+		if ( (fp = fopen(file_name, "wb")) == NULL ) 
+			error("Unable to open file for writing\n");	
+		free(file_name);
 		//?? needs to make sure able to handle mutiple messages 
+		fwrite(buffer,1, num_bytes,fp);
 		flush_buffer(buffer);
-		if ( (n = Readfile(soc, buffer, num_bytes)) != num_bytes )
+	/*	if ( (n = Readfile(soc, buffer, num_bytes)) != num_bytes )
 			//error("Expected and received bytes dont match\n");
 			printf("%d Expected obtained %d bytes\n",num_bytes,n );
+	*/	
+//		uint32_t bytes_read = 0, i;
 		
-		fwrite(buffer, 1 , n, fp);
-		flush_buffer(buffer);
-		
+
+		fclose(fp);
 
 
 	}
@@ -93,33 +100,46 @@ void getFile(int soc, char *buffer){
 
 }
 
-ssize_t Readfile(int soc, void *vptr, size_t maxlen){
-	ssize_t n, rc;
-	char c, *buffer;
-	buffer = vptr;
+ssize_t Readfile(int soc, char *vptr, size_t maxlen){
+    ssize_t n, rc;
+    char    c, *buffer;
 
-	for(n = 0; n < maxlen; n++ ){
-		if ( (rc == read(soc, &c ,1 )) == 1 ){
-			*buffer++ = c;
-			if( c == EOF )
-				break;
-		}else if(rc == 0){
-			if (n==0)
-				return 0;
-			else
-				break;
-		}
-		else{
-			if (errno == EINTR)
-				continue;
-			printf("%c \n is character, %d is read count\n", c,(uint) rc);
-			return -1;
-		}
+    buffer = vptr;
+
+    //attempt to read maxlen num bytes
+    for ( n = 1; n < maxlen; n++ ) {
+	
+	//if successful read of one character
+	if ( (rc = read(soc, &c, 1)) == 1 ) {
+	    //increment buffer pointer and store the read byte
+	    *buffer++ = c;
+	    //loop if newline character encountered
+	    if ( c == EOF )
+		break;
 	}
-	*buffer = '\0';
-	return n;
+	
+	//if no character was read
+	else if ( rc == 0 ) {
+	    //if  in first iteration of reading 
+	    if ( n == 1 )
+		return 0;  //no data ever available in the socket
+	    else
+		break; //finished reading all data in socket
+	}
+
+	else {
+	    if ( errno == EINTR ) //non fatal error 
+		continue;
+	    return -1; //all other errors 
+	}
+    }
+
+    *buffer = 0; //load terminating null byte 
+    return n;
+
 
 }
+
 
 
 
