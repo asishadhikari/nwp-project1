@@ -83,17 +83,15 @@ int main(int argc, char** argv){
 void* threadFunc(void *arg)
 
 {
-
+	printf("\nNew Client Detected...\n");
 	int clSocket = *( (int *) arg), rn ;
 	char *read_buffer;
 	if ( !(read_buffer = calloc(1,MAX_LINE)) ) 
 		return NULL;
 	//keep alive connection
+	while(1){
 		rn = Readline(clSocket, read_buffer, MAX_LINE);
-		printf("Read %d bytes\n",rn);
 		int command = parse_command(read_buffer);
-		printf("%c\n",(char)read_buffer[rn-1]) ;
-		printf("Command %d received.\n",command);
 		//parse command
 		switch (command){
 			case 1:
@@ -104,8 +102,9 @@ void* threadFunc(void *arg)
 			default:
 				break;
 		}	
-		free(read_buffer);
-	printf("Closing client connection\n");
+	}
+	free(read_buffer);
+	printf("\nClosing client connection\n");
 	close(clSocket);
 	pthread_exit(NULL);
 

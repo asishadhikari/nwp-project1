@@ -26,19 +26,9 @@ void capString(int soc, char *buf){
 	Writeline(soc, &nl, sizeof(nl));
 	flush_buffer(buf);
 	int rc = Readline(soc, buf, BUFFER_SIZE);
-	//print the response from server
-	printf("%d is a number and %d bytes read\n",buf[0],rc );
-	/*char c_num_bytes[4];
-	for (int i = 0; i < 3; i++){
-		printf("%d\n",buf[i]);
-		c_num_bytes[i]= buf[i];
-	}
-	uint32_t num_bytes = (uint32_t) atoi(c_num_bytes);
-	printf("Response string was %d\n",(int) num_bytes );*/
-
 	flush_buffer(buf);
 	Readline(soc, buf, BUFFER_SIZE);
-	printf("The capitalised string is %s\n",buf);
+	printf("\tThe capitalised string is %s\n\n",buf);
 }
 
 
@@ -58,7 +48,6 @@ void getFile(int soc, char *buffer){
 	char *num_bytes_c = calloc(4,1);
 	for (int i = 0; i < 4 ; i++){
 		num_bytes_c[3-i] = temp_buf[i];
-		printf("%d\n", num_bytes_c[i] );
 	}
 
 	uint32_t num_bytes;
@@ -73,7 +62,7 @@ void getFile(int soc, char *buffer){
 	Readfile(soc, buffer, BUFFER_SIZE);
 	//file not found in server
 	if (strcmp(buffer,"NOT FOUND") == 0){
-		printf("\n File not found in server \n");
+		printf("\tFile not found in server directory!! \n\n");
 		flush_buffer(buffer);
 	}else{
 		FILE *fp;

@@ -98,7 +98,6 @@ void capitalize(char *buf, int soc){
     		c = c - ('a' - 'A');
 			buf[i] = c;
 		}
-		printf(" Received : %c\n",c );
 		i++;
 	}
 	Writeline(soc, &i, sizeof(i));
@@ -112,7 +111,7 @@ void send_file(char *buf, int soc){
 	uint32_t num_bytes = 0;
 	//read in file name
 	Readline(soc, buf, MAX_LINE-1);
-	printf("Client asking for file %s\n",buf );
+	printf("\nClient asking for file %s\n",buf );
 	//sanitise buffer to just contain the provided file name
 	for (int i = 0; i < strlen(buf); i++){
 		c = buf[i];

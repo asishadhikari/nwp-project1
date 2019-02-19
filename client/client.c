@@ -61,7 +61,6 @@ int main(int argc, char *argv[]){
 	while (user_input!= 'q'){
 		printf("\n\tEnter 's' (capitalize string), 'f' (receive file), or 'q' (to quit)... (\n" );
 		user_input = (char) getc(stdin);
-		printf("%c chosen\n",user_input );
 		trash = getc(stdin); //get rid of newline character
 		flush_buffer(buffer);
 		switch(user_input){
@@ -71,7 +70,7 @@ int main(int argc, char *argv[]){
 				capString(clSocket,buffer);
 				break;
 			case'f':
-				printf("Enter the file name you want from server\n");
+				printf("\nEnter the file name you want from server\n");
 				fgets(buffer, BUFFER_SIZE, stdin);
 				getFile(clSocket, buffer);
 				break;
