@@ -44,6 +44,7 @@ void capString(int soc, char *buf){
 
 void getFile(int soc, char *buffer){
 	char *pad = "FILE\n", *temp_buf,  nl = '\n', *endptr;
+	int n; 
 	Writeline(soc, pad, 5);
 	Writeline(soc, buffer, strlen(buffer));
 	Writeline(soc, &nl, 1);
@@ -53,8 +54,7 @@ void getFile(int soc, char *buffer){
 		error("Unable to allocate memory");
 	}
 
-	int n = Readline(soc, temp_buf, BUFFER_SIZE);
-	printf("%d characters read\n",n );
+	Readline(soc, temp_buf, BUFFER_SIZE);
 	char *num_bytes_c = calloc(4,1);
 	for (int i = 0; i < 4 ; i++){
 		num_bytes_c[3-i] = temp_buf[i];
@@ -66,8 +66,7 @@ void getFile(int soc, char *buffer){
  	 num_bytes = (num_bytes << 8) | num_bytes_c[i];
 	}
 
-	printf("%d have been read\n",num_bytes );
-	flush_buffer(temp_buf);
+	free(num_bytes_c);
 	Readline(soc, temp_buf, BUFFER_SIZE);
 	//file not found in server
 	if (strcmp(temp_buf,"NOT FOUND") == 0){
@@ -77,13 +76,50 @@ void getFile(int soc, char *buffer){
 		FILE *fp;
 		buffer[strlen(buffer)-1] = '\0';
 		if ( (fp = fopen(buffer, "wb")) == NULL ) 
-		error("Unable to open file for writing\n");
-
+		error("Unable to open file for writing\n");	
+		//?? needs to make sure able to handle mutiple messages 
+		flush_buffer(buffer);
+		if ( (n = Readfile(soc, buffer, num_bytes)) != num_bytes )
+			//error("Expected and received bytes dont match\n");
+			printf("%d Expected obtained %d bytes\n",num_bytes,n );
 		
+		fwrite(buffer, 1 , n, fp);
+		flush_buffer(buffer);
+		
+
+
 	}
+	free(temp_buf);
 
 }
 
+ssize_t Readfile(int soc, void *vptr, size_t maxlen){
+	ssize_t n, rc;
+	char c, *buffer;
+	buffer = vptr;
+
+	for(n = 0; n < maxlen; n++ ){
+		if ( (rc == read(soc, &c ,1 )) == 1 ){
+			*buffer++ = c;
+			if( c == EOF )
+				break;
+		}else if(rc == 0){
+			if (n==0)
+				return 0;
+			else
+				break;
+		}
+		else{
+			if (errno == EINTR)
+				continue;
+			printf("%c \n is character, %d is read count\n", c,(uint) rc);
+			return -1;
+		}
+	}
+	*buffer = '\0';
+	return n;
+
+}
 
 
 
