@@ -66,7 +66,6 @@ void getFile(int soc, char *buffer){
  	 num_bytes = (num_bytes << 8) | num_bytes_c[i];
 	}
 
-	free(num_bytes_c);
 	char *file_name = calloc(100,1);
 	strcpy(file_name, buffer);
 	flush_buffer(buffer);
@@ -82,16 +81,8 @@ void getFile(int soc, char *buffer){
 		if ( (fp = fopen(file_name, "wb")) == NULL ) 
 			error("Unable to open file for writing\n");	
 		free(file_name);
-		//?? needs to make sure able to handle mutiple messages 
 		fwrite(buffer,1, num_bytes,fp);
-		flush_buffer(buffer);
-	/*	if ( (n = Readfile(soc, buffer, num_bytes)) != num_bytes )
-			//error("Expected and received bytes dont match\n");
-			printf("%d Expected obtained %d bytes\n",num_bytes,n );
-	*/	
-//		uint32_t bytes_read = 0, i;
-		
-
+		free(num_bytes_c);
 		fclose(fp);
 
 
@@ -133,8 +124,6 @@ ssize_t Readfile(int soc, char *vptr, size_t maxlen){
 	    return -1; //all other errors 
 	}
     }
-
-    *buffer = 0; //load terminating null byte 
     return n;
 
 
