@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include <string.h>
 #include <pthread.h>
+#include <arpa/inet.h>
 #include<stdint.h>
 
 #include "helper.h"

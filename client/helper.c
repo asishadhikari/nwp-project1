@@ -43,7 +43,7 @@ void capString(int soc, char *buf){
 
 
 void getFile(int soc, char *buffer){
-	char *pad = "FILE\n", *temp_buf,  nl = '\n';
+	char *pad = "FILE\n", *temp_buf,  nl = '\n', *endptr;
 	Writeline(soc, pad, 5);
 	Writeline(soc, buffer, strlen(buffer));
 	Writeline(soc, &nl, 1);
@@ -53,7 +53,20 @@ void getFile(int soc, char *buffer){
 		error("Unable to allocate memory");
 	}
 
-	Readline(soc, temp_buf, BUFFER_SIZE);
+	int n = Readline(soc, temp_buf, BUFFER_SIZE);
+	printf("%d characters read\n",n );
+	char *num_bytes_c = calloc(4,1);
+	for (int i = 0; i < 4 ; i++){
+		num_bytes_c[3-i] = temp_buf[i];
+		printf("%d\n", num_bytes_c[i] );
+	}
+
+	uint32_t num_bytes;
+	for ( int i = 0 ; i < 4 ; i++ ) {
+ 	 num_bytes = (num_bytes << 8) | num_bytes_c[i];
+	}
+
+	printf("%d have been read\n",num_bytes );
 	flush_buffer(temp_buf);
 	Readline(soc, temp_buf, BUFFER_SIZE);
 	//file not found in server
@@ -65,6 +78,7 @@ void getFile(int soc, char *buffer){
 		buffer[strlen(buffer)-1] = '\0';
 		if ( (fp = fopen(buffer, "wb")) == NULL ) 
 		error("Unable to open file for writing\n");
+
 		
 	}
 
