@@ -34,4 +34,5 @@
 
   Where ```xxx.xxx.xxx``` is the server IP address and ```yy``` is the port number. 
 To use the client software, just follow the prompts on screen :)
-  [logo_c]: <https://seeklogo.com/images/C/c-programming-language-logo-9B32D017B1-seeklogo.com.png>
+
+ [logo_c]: <https://seeklogo.com/images/C/c-programming-language-logo-9B32D017B1-seeklogo.com.png>
