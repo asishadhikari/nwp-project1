@@ -43,12 +43,26 @@ void capString(int soc, char *buf){
 
 
 void getFile(int soc, char *buffer){
-	char *pad = "FILE\n", nl = '\n';
-	
-	printf("Asking %s file from server\n",buffer);
-	
-	FILE *fp;
+	char *pad = "FILE\n", *temp_buf,  nl = '\n';
+	Writeline(soc, pad, 5);
+	Writeline(soc, buffer, strlen(buffer));
+	Writeline(soc, &nl, 1);
 
+	if ( (temp_buf = calloc(BUFFER_SIZE, 1)) == NULL ){
+		errno = ENOMEM;
+		error("Unable to allocate memory");
+	}
+
+	Readline(soc, temp_buf, BUFFER_SIZE);
+	flush_buffer(buffer);
+	Readline(soc, temp_buf, BUFFER_SIZE);
+	printf("\n\n\n%sM\n\n\n",temp_buf );
+	if (strcmp(temp_buf,"NOT FOUND") == 0){
+		printf("\n File not found in server \n");
+		flush_buffer(buffer);
+	}else{
+		
+	}
 
 }
 

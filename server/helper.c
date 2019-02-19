@@ -111,6 +111,7 @@ void send_file(char *buf, int soc){
 	uint32_t num_bytes = 0;
 	//read in file name
 	Readline(soc, buf, MAX_LINE-1);
+	printf("Client asking for file %s\n",buf );
 	//sanitise buffer to just contain the provided file name
 	for (int i = 0; i < strlen(buf); i++){
 		c = buf[i];
@@ -122,6 +123,7 @@ void send_file(char *buf, int soc){
 	if( (fp = fopen(buf,"rb")) ==NULL){
 		//no such file present and assuming buffer is large enough for mesg
 		num_bytes = strlen(message);
+		printf("%d num bytes\n",num_bytes );
 		Writeline(soc,&num_bytes,sizeof(num_bytes));
 		Writeline(soc,&nl,sizeof(nl));
 		Writeline(soc,message,num_bytes);
