@@ -38,7 +38,18 @@ void capString(int soc, char *buf){
 
 	flush_buffer(buf);
 	Readline(soc, buf, BUFFER_SIZE);
-	printf("The receied string is %s\n",buf);
+	printf("The capitalised string is %s\n",buf);
+}
+
+
+void getFile(int soc, char *buffer){
+	char *pad = "FILE\n", nl = '\n';
+	
+	printf("Asking %s file from server\n",buffer);
+	
+	FILE *fp;
+
+
 }
 
 
