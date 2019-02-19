@@ -61,6 +61,7 @@ int main(int argc, char *argv[]){
 	while (user_input!= 'q'){
 		printf("\n\tEnter 's' (capitalize string), 'f' (receive file), or 'q' (to quit)... (\n" );
 		user_input = (char) getc(stdin);
+		printf("%c chosen\n",user_input );
 		trash = getc(stdin); //get rid of newline character
 		flush_buffer(buffer);
 		switch(user_input){

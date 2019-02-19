@@ -123,7 +123,6 @@ void send_file(char *buf, int soc){
 	if( (fp = fopen(buf,"rb")) ==NULL){
 		//no such file present and assuming buffer is large enough for mesg
 		num_bytes = strlen(message);
-		printf("%d num bytes\n",num_bytes );
 		Writeline(soc,&num_bytes,sizeof(num_bytes));
 		Writeline(soc,&nl,sizeof(nl));
 		Writeline(soc,message,num_bytes);

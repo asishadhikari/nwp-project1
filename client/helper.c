@@ -54,15 +54,27 @@ void getFile(int soc, char *buffer){
 	}
 
 	Readline(soc, temp_buf, BUFFER_SIZE);
-	flush_buffer(buffer);
+	flush_buffer(temp_buf);
 	Readline(soc, temp_buf, BUFFER_SIZE);
-	printf("\n\n\n%sM\n\n\n",temp_buf );
+	//file not found in server
 	if (strcmp(temp_buf,"NOT FOUND") == 0){
 		printf("\n File not found in server \n");
 		flush_buffer(buffer);
 	}else{
-		
+		receiveFile(soc, buffer,temp_buf);
 	}
+
+}
+
+void receiveFile(int soc, char *buffer, char *temp_buf){
+	FILE *fp;
+	printf("%s is file name\n",buffer );
+	int len_name = strlen(buffer);
+	buffer[len_name-1] = '\0';
+	if ( (fp = fopen(buffer, "wb")) ==NULL)
+		error("Unable to open file for writing\n");
+	//write the bytes from first message
+		
 
 }
 
